@@ -96,22 +96,24 @@ function addInventory() {
         connection.query("SELECT stockquantity FROM products WHERE itemid = ?", [answer.id], function (err, res) {
             console.log("res:", res[0].stockquantity);
             getQuantity = parseInt(res[0].stockquantity) + parseInt(answer.quantity)
+            console.log("getQuant: " + getQuantity);
+            console.log("id: "+answer.id);
 
+            connection.query(
+                "UPDATE products SET ? WHERE  ?",
+                [
+                    { stockquantity: getQuantity },
+    
+                    { itemid: parseInt(answer.id) }
+    
+                ], function (err, res) {
+                    console.log("it has been updated");
+                    options();
+                }
+            );
         })
-        console.log("getQuant: " + getQuantity);
-        console.log("id: "+answer.id);
-        connection.query(
-            "UPDATE products SET ? WHERE  = ?",
-            [
-                { stockquantity: getQuantity },
-
-                { itemid: answer.id }
-
-            ], function (err, res) {
-                console.log("it has been updated");
-                options();
-            }
-        );
+      
+        
     })
 };
 
